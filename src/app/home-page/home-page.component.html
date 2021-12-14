@@ -1,0 +1,42 @@
+<app-header-file></app-header-file>
+ 
+  <div style="float: left; width: 200px; height: 25px; margin-left:20px;  background-color: #41417a; color: white ; font-weight: bolder; font-size: 16px; padding-top: 13px; padding-left: 54px;"
+  [ngStyle]="{ backgroundColor: seletedTab === tab ? '#33325f' : '#4f4e96' }" *ngFor="let tab of tabs" (click)="onTabClicked(tab)">{{ tab }}</div>
+<ng-container *ngIf="postsData$ | async as postData">
+    <table id="posts">
+      <thead>
+        <th>Id</th>
+        <th width="10%">Name</th>
+        <th width="10%" width="55%">Post</th>
+        <th>Date</th>
+        <th>Status</th>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let post of postData"
+          [ngStyle]="{ backgroundColor: post.isAccepted ? '#ccc' : 'white' }"
+        >
+          <td>{{ post.id }}</td>
+          <td [routerLink]="['/users', post.userId]">{{ post.name }}</td>
+          <td>{{ post.details }}
+            <tr>
+                <td style="width: 600px;">Comments : <textarea style="width: 600px;"></textarea>
+                    <button style="float: right;">Submit</button></td>
+
+            </tr>
+          </td>
+          <td>{{ post.date }}</td>
+         
+          <td>
+            <button (click)="onAcceptClick(post)">
+              {{ post.isAccepted ? "Reject" : "Accept" }}
+            </button>
+          </td>
+         
+        </tr>
+      </tbody>
+    </table>
+  
+    <button style="float: right; margin-right: 30px ;" *ngIf="loadMore && totalPostData > 5" (click)="onLoadMoreClick()">Load More</button>
+  </ng-container>
+  <app-footer></app-footer>

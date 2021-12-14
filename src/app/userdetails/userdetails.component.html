@@ -1,0 +1,22 @@
+
+<app-header-file></app-header-file>
+<ng-container *ngIf="userData as user">
+  
+  <h2 style="text-align:center">User Profile Details</h2>
+
+<div class="card">
+  <img src="assets/profile.png" alt="John" style="width:50%">
+  <h1>  {{ user.name }}</h1>
+  <p class="title">{{ user.address }}</p>
+  <p>{{ user.contact }}</p>
+  <div style="margin: 24px 0;">
+    <a href="#"><i class="fa fa-dribbble"></i></a> 
+    <a href="#"><i class="fa fa-twitter"></i></a>  
+    <a href="#"><i class="fa fa-linkedin"></i></a>  
+    <a href="#"><i class="fa fa-facebook"></i></a> 
+  </div>
+  <p><button>Contact</button></p>
+</div>
+
+</ng-container>
+<app-footer></app-footer>
