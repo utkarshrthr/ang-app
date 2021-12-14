@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+
+button {
+  background-color: white;
+  border: 1px solid rgb(168, 164, 164);
+  color: rgb(71, 70, 70);
+  height: 28px;
+}
