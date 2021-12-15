@@ -1,7 +1,5 @@
 const mongoose = require('mongoose')
 
-// npm install mongoose
-
 const mongoDb = 'mongodb://127.0.0.1:27017/deepak'
 
 mongoose.connect(mongoDb)

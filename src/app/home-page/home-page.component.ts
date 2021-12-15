@@ -1,43 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { WebService } from '../services/web.service';
-import { Subject, Observable } from "rxjs";
-import { map, startWith, switchMap, tap } from "rxjs/operators";
+import { Subject, Observable } from 'rxjs';
+import { map, startWith, switchMap, tap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-home-page',
-  templateUrl: './home-page.component.html',
-  styleUrls: ['./home-page.component.css']
+	selector: 'app-home-page',
+  	templateUrl: './home-page.component.html',
+  	styleUrls: ['./home-page.component.css'],
 })
 export class HomePageComponent implements OnInit {
- 
-  constructor(public webService : WebService) { }
-  tabs = ["Work Requests", "Work Providers"];
-  seletedTab = "Work Requests";
-  loadMore: Boolean = true;
-  refreshPostData = new Subject<boolean>();
-  refreshPostData$ = this.refreshPostData.asObservable();
-  totalPostData = 0;
-  postsData$ = this.refreshPostData$.pipe(
-    startWith(true),
-    switchMap((_) =>
-    this.getDataBasedOnTab().pipe(
-        map((postData) =>
-          postData.filter((d) => {
+  
+	
+	constructor(private webService: WebService) { 
+			
+	}
+  	tabs = ['Work Requests', 'Work Providers'];
+  	seletedTab = 'Work Requests';
+  	loadMore: Boolean = true;
+  	refreshPostData = new Subject<boolean>();
+  	refreshPostData$ = this.refreshPostData.asObservable();
+  	totalPostData = 0;
+  	postsData$ = this.refreshPostData$.pipe(startWith(true), switchMap((_) =>
+    	this.getDataBasedOnTab().pipe(map((postData) => postData.filter((d) => {
             const date = new Date();
             const postDate = new Date(d.date);
             const fourtyEightHours = new Date(
-              date.setHours(date.getHours() - 48)
+            	date.setHours(date.getHours() - 48)
             );
-
             return fourtyEightHours < postDate;
-          })
-        ),
+        })),
         map((postData) =>
-          postData.sort((a, b) => {
-            var dateA = new Date(a.date).getTime();
-            var dateB = new Date(b.date).getTime();
-            return dateA > dateB ? -1 : 1;
-          })
+          	postData.sort((a, b) => {
+            	var dateA = new Date(a.date).getTime();
+            	var dateB = new Date(b.date).getTime();
+            	return dateA > dateB ? -1 : 1;
+          	})
         ),
         tap((postData) => {
           this.totalPostData = postData.length;
@@ -53,13 +50,14 @@ export class HomePageComponent implements OnInit {
     )
   );
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  getDataBasedOnTab(): Observable<any>  {
+  getDataBasedOnTab(): Observable<any> {  
+	this.webService.init();
     switch (this.seletedTab) {
-      case "Work Requests":
+      case 'Work Requests':
         return this.webService.posts$;
-      case "Work Providers":
+      case 'Work Providers':
         return this.webService.postsB$;
       default:
         return this.webService.posts$;
@@ -67,7 +65,7 @@ export class HomePageComponent implements OnInit {
   }
 
   onLoadMoreClick() {
-    this.loadMore = false
+    this.loadMore = false;
     this.refreshPostData.next(true);
   }
 
@@ -77,15 +75,14 @@ export class HomePageComponent implements OnInit {
     this.refreshPostData.next(true);
   }
 
-  
   onAcceptClick(selectedPost: any) {
     if (!selectedPost) return;
 
-    if (this.seletedTab === "Work Requests") {
+    if (this.seletedTab === 'Work Requests') {
       return this.updatePost(selectedPost, this.webService.posts.getValue());
     }
 
-    if (this.seletedTab === "Work Providers") {
+    if (this.seletedTab === 'Work Providers') {
       return this.updatePost(selectedPost, this.webService.postsB.getValue());
     }
   }
@@ -100,13 +97,12 @@ export class HomePageComponent implements OnInit {
     const postId = currentPost.id;
     const status = !!!currentPost.isAccepted;
 
-    if (this.seletedTab === "Work Requests") {
-      return this.webService.updatePost(postId, "isAccepted", status);
+    if (this.seletedTab === 'Work Requests') {
+		return this.webService.updatePost(postId, 'isAccepted', status);
     }
 
-    if (this.seletedTab === "Work Providers") {
-      return this.webService.updatePostB(currentPost.id, "isAccepted", status);
+    if (this.seletedTab === 'Work Providers') {
+      return this.webService.updatePostB(currentPost.id, 'isAccepted', status);
     }
   }
-
 }
